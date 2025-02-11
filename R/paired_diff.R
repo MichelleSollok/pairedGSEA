@@ -876,8 +876,9 @@ aggregate_pvalue <- function(
     
     # Rename columns and convert values to the correct type
     df <- df[!is.na(df$pvalue) & !is.na(df$baseMean),]
+    df <- as.data.frame(df)
     # Prevent warning from Lancaster
-    df@listData$pvalue[df@listData$pvalue < 10e-320] <- 10e-320 # this line needed to work
+    if(any(df$pvalue < 10e-320)) df$pvalue[df$pvalue < 10e-320] <- 10e-320 # this line needed to work
 
     # Split data by gene and perform aggregation
     res <- S4Vectors::split(df, df$gene)
